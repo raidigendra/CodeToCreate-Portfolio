@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanoid - Creative Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #64649b 0%, #40548b 100%);
+            overflow-x: hidden;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(226, 49, 214, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        nav.scrolled {
+            background: rgba(22, 33, 62, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: #667eea;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+            background: rgba(102, 212, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 5px 15px rgba(114, 71, 71, 0.3);
+            position: relative;
+            z-index: 20;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 20;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(214, 102, 234, 0.5);
+            background: linear-gradient(45deg, #764ba2, #66eaac);
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            color: white;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: rgba(117, 166, 175, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 0;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .svg-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            background: rgba(40, 54, 93, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .portfolio-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(99, 207, 200, 0.5);
+        }
+
+        .portfolio-svg {
+            height: 220px;
+            width: 100%;
+            background: rgba(95, 180, 154, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .portfolio-content {
+            padding: 2rem;
+        }
+
+        .portfolio-content h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .portfolio-content p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        /* Skills Section */
+        .skills {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            background: rgba(102, 126, 234, 0.1);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .skill-icon {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-card h3 {
+            color: white;
+            margin-bottom: 1.2rem;
+            font-size: 1.4rem;
+        }
+
+        .skill-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: rgba(22, 33, 62, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-content {
+            text-align: center;
+            color: white;
+        }
+
+        .contact-content p {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            min-width: 200px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-8px);
+            background: rgba(102, 126, 234, 0.1);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .contact-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #667eea;
+        }
+
+        .contact-item h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-item p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 15, 30, 0.9);
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(102, 126, 234, 0.2);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* SVG Animations */
+        .blink {
+            animation: blink 3s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+        
+        .rotate {
+            animation: rotate 8s infinite linear;
+            transform-origin: center;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .bounce {
+            animation: bounce 3s infinite ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .float {
+            animation: float 4s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .slide {
+            animation: slide 5s infinite alternate ease-in-out;
+        }
+        
+        @keyframes slide {
+            from { transform: translateX(-10px); }
+            to { transform: translateX(10px); }
+        }
+        
+        .draw {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 5s forwards;
+        }
+        
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Typing effect */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #667eea;
+            margin-left: 5px;
+            animation: blink-cursor 0.7s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .contact-info {
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .section-title {
+                font-size: 2.3rem;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .contact-item {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .cta-button {
+                padding: 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo"><i class="fas fa-code"></i> Humanoid</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#667eea" stop-opacity="0.15" />
+                        <stop offset="100%" stop-color="#764ba2" stop-opacity="0.15" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.1" />
+                        <stop offset="100%" stop-color="#feca57" stop-opacity="0.1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Abstract background shapes -->
+                <circle cx="200" cy="200" r="150" fill="url(#grad1)" class="float" style="animation-delay: 0s;" />
+                <circle cx="1000" cy="600" r="120" fill="url(#grad2)" class="float" style="animation-delay: 1s;" />
+                <rect x="800" y="200" width="200" height="200" rx="50" fill="rgba(118, 75, 162, 0.1)" transform="rotate(45 900 300)" class="rotate" />
+                
+                <!-- Flowing lines and curves -->
+                <path d="M0,400 Q300,200 600,400 T1200,400" stroke="rgba(255, 255, 255, 0.1)" stroke-width="4" fill="none" />
+                <path d="M0,600 Q300,800 600,600 T1200,600" stroke="rgba(255, 255, 255, 0.1)" stroke-width="4" fill="none" />
+                
+                <!-- Tech-inspired elements -->
+                <g class="pulse" style="animation-delay: 0.5s;">
+                    <rect x="150" y="500" width="80" height="80" rx="10" fill="rgba(255, 255, 255, 0.07)" transform="rotate(15 190 540)" />
+                    <rect x="950" y="300" width="60" height="60" rx="10" fill="rgba(255, 255, 255, 0.07)" transform="rotate(-15 980 330)" />
+                    <circle cx="400" cy="650" r="50" fill="rgba(255, 255, 255, 0.07)" />
+                </g>
+                
+                <!-- Creative elements -->
+                <g class="float" style="animation-delay: 2s;">
+                    <path d="M500,200 Q550,150 600,200 T700,200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="3" fill="none" />
+                    <path d="M700,200 Q750,250 800,200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="3" fill="none" />
+                </g>
+                
+                <!-- Center focus with animated drawing -->
+                <path class="draw" d="M450,350 C500,300 700,300 750,350 S700,450 600,450 S450,400 450,350" 
+                      stroke="#ffffff" stroke-width="3" stroke-opacity="0.2" fill="none" 
+                      stroke-dasharray="1000" stroke-dashoffset="1000" />
+                
+                <!-- Subtle code brackets -->
+                <g fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="2">
+                    <path d="M300,250 L330,250 L330,400 L300,400" />
+                    <path d="M900,250 L870,250 L870,400 L900,400" />
+                </g>
+                
+                <!-- Floating dots -->
+                <g class="float">
+                    <circle cx="100" cy="100" r="8" fill="#ffffff" fill-opacity="0.15" style="animation-delay: 0.2s;" />
+                    <circle cx="1100" cy="700" r="6" fill="#ffffff" fill-opacity="0.15" style="animation-delay: 0.4s;" />
+                    <circle cx="200" cy="700" r="10" fill="#ffffff" fill-opacity="0.15" style="animation-delay: 0.6s;" />
+                    <circle cx="1000" cy="100" r="7" fill="#ffffff" fill-opacity="0.15" style="animation-delay: 0.8s;" />
+                </g>
+            </svg>
+        </div>
+        
+        <div class="hero-content">
+            <h1>Creative Developer</h1>
+            <p>Bringing ideas to life through innovative design and cutting-edge technology. I create digital experiences that inspire and engage.</p>
+            <a href="#portfolio" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title fade-in">About Me</h2>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <p>I'm a passionate creative developer with over 5 years of experience in building stunning web applications and digital experiences. My journey began with a fascination for how technology can solve real-world problems and create meaningful connections between people and brands.</p>
+                    <p>I specialize in front-end development, user experience design, and creative coding. When I'm not crafting pixel-perfect interfaces, you can find me exploring new technologies, contributing to open-source projects, or sketching ideas for my next creative venture.</p>
+                    <p>My approach combines technical expertise with artistic vision, ensuring that every project not only functions flawlessly but also tells a compelling story through design.</p>
+                </div>
+                <div class="about-image fade-in">
+                    <div class="svg-container">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="90" fill="#1e3a8a" opacity="0.3" />
+                            <circle cx="70" cy="80" r="15" fill="white" opacity="0.8" />
+                            <circle cx="130" cy="80" r="15" fill="white" opacity="0.8" />
+                            <circle class="blink" cx="70" cy="80" r="5" fill="#667eea" />
+                            <circle class="blink" cx="130" cy="80" r="5" fill="#667eea" />
+                            <path d="M70 130 Q100 160 130 130" stroke="#667eea" stroke-width="5" fill="none" />
+                            <path class="float" d="M40 50 Q60 20 80 40" stroke="#764ba2" stroke-width="3" fill="none" />
+                            <path class="float" d="M160 50 Q140 20 120 40" stroke="#764ba2" stroke-width="3" fill="none" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <h2 class="section-title fade-in">My Portfolio</h2>
+            <div class="portfolio-grid">
+                <!-- E-commerce Platform -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-svg">
+                        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="50" width="160" height="60" rx="10" fill="#2d3748" />
+                            <rect x="40" y="30" width="120" height="20" rx="5" fill="#4a5568" />
+                            <circle class="bounce" cx="60" cy="80" r="15" fill="#ff6b6b" />
+                            <circle class="bounce" style="animation-delay: 0.2s;" cx="100" cy="80" r="15" fill="#667eea" />
+                            <circle class="bounce" style="animation-delay: 0.4s;" cx="140" cy="80" r="15" fill="#feca57" />
+                            <rect x="170" y="20" width="20" height="20" rx="5" fill="#764ba2" />
+                            <rect x="170" y="45" width="20" height="20" rx="5" fill="#667eea" />
+                        </svg>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>E-commerce Platform</h3>
+                        <p>A modern, responsive e-commerce solution built with React and Node.js. Features include real-time inventory management, secure payment processing, and an intuitive admin dashboard.</p>
+                    </div>
+                </div>
+                
+                <!-- Creative Agency Website -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-svg">
+                        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="30" width="160" height="80" rx="10" fill="#2d3748" />
+                            <circle class="rotate" cx="100" cy="60" r="20" fill="#667eea" />
+                            <rect x="50" y="50" width="100" height="20" rx="5" fill="#feca57" />
+                            <path class="slide" d="M30 90 L170 90" stroke="#ff6b6b" stroke-width="3" />
+                            <path class="slide" d="M30 100 L170 100" stroke="#764ba2" stroke-width="3" />
+                        </svg>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Creative Agency Website</h3>
+                        <p>An award-winning website for a creative agency featuring immersive animations, interactive portfolio showcases, and seamless user experience across all devices.</p>
+                    </div>
+                </div>
+                
+                <!-- Mobile App UI/UX -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-svg">
+                        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="50" y="20" width="100" height="80" rx="15" fill="#2d3748" />
+                            <rect x="60" y="30" width="80" height="60" rx="10" fill="#e2e8f0" />
+                            <circle cx="100" cy="50" r="10" fill="#667eea" />
+                            <rect x="70" cy="65" width="60" height="10" rx="5" fill="#feca57" />
+                            <rect x="80" cy="80" width="40" height="5" rx="2" fill="#ff6b6b" />
+                            <circle class="pulse" cx="100" cy="100" r="5" fill="#764ba2" />
+                        </svg>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Mobile App UI/UX</h3>
+                        <p>Complete UI/UX design for a fitness tracking mobile app. Includes user research, wireframing, prototyping, and final design implementation with smooth micro-interactions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title fade-in">My Skills</h2>
+            <div class="skills-grid">
+                <!-- Frontend Development -->
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="60" height="60" rx="10" fill="#667eea" opacity="0.7" />
+                            <rect class="bounce" x="30" y="30" width="40" height="10" rx="2" fill="#fff" />
+                            <rect class="bounce" style="animation-delay: 0.2s;" x="30" y="50" width="40" height="10" rx="2" fill="#fff" />
+                            <rect class="bounce" style="animation-delay: 0.4s;" x="30" y="70" width="40" height="10" rx="2" fill="#fff" />
+                        </svg>
+                    </div>
+                    <h3>Frontend Development</h3>
+                    <p>Expert in React, Vue.js, HTML5, CSS3, and JavaScript. Creating responsive, accessible, and performant user interfaces with modern frameworks and best practices.</p>
+                </div>
+                
+                <!-- UI/UX Design -->
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="30" fill="#feca57" opacity="0.7" />
+                            <circle class="pulse" cx="50" cy="50" r="20" fill="#ff6b6b" opacity="0.7" />
+                            <circle class="pulse" style="animation-delay: 0.5s;" cx="50" cy="50" r="10" fill="#667eea" opacity="0.7" />
+                        </svg>
+                    </div>
+                    <h3>UI/UX Design</h3>
+                    <p>Proficient in Figma, Adobe Creative Suite, and design systems. Crafting user-centered designs that balance aesthetics with functionality and usability.</p>
+                </div>
+                
+                <!-- Backend Development -->
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="60" height="60" rx="5" fill="#764ba2" opacity="0.7" />
+                            <rect x="30" y="30" width="10" height="10" rx="2" fill="#fff" />
+                            <rect x="30" y="50" width="10" height="10" rx="2" fill="#fff" />
+                            <rect x="30" y="70" width="10" height="10" rx="2" fill="#fff" />
+                            <rect class="blink" style="animation-delay: 0.5s;" x="60" y="30" width="10" height="10" rx="2" fill="#ff6b6b" />
+                            <rect class="blink" style="animation-delay: 1s;" x="60" y="50" width="10" height="10" rx="2" fill="#667eea" />
+                            <rect class="blink" style="animation-delay: 1.5s;" x="60" y="70" width="10" height="10" rx="2" fill="#feca57" />
+                        </svg>
+                    </div>
+                    <h3>Backend Development</h3>
+                    <p>Skilled in Node.js, Python, and database management. Building robust APIs, managing server infrastructure, and ensuring secure data handling.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title fade-in">Get In Touch</h2>
+            <div class="contact-content fade-in">
+                <p>Ready to bring your next project to life? I'm always excited to collaborate on innovative ideas and challenging projects. Let's create something amazing together!</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="icon">📧</div>
+                        <h3>Email</h3>
+                        <p>alex.chen@email.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon">📱</div>
+                        <h3>Phone</h3>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon">🌐</div>
+                        <h3>LinkedIn</h3>
+                        <p>linkedin.com/in/alexchen</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-dribbble"></i></a>
+            </div>
+            <p class="copyright">© 2023 Alex Chen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        function fadeInOnScroll() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Initialize animations
+        window.addEventListener('scroll', fadeInOnScroll);
+        window.addEventListener('load', () => {
+            createParticles();
+            fadeInOnScroll();
+            
+            // Start the drawing animation for the center focus element
+            setTimeout(() => {
+                const drawElement = document.querySelector('.draw');
+                if (drawElement) {
+                    drawElement.style.animation = 'draw 5s forwards';
+                }
+            }, 1500);
+        });
+
+        // Add dynamic typing effect to hero text
+        const heroText = document.querySelector('.hero h1');
+        const text = 'Creative Developer';
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < text.length) {
+                heroText.innerHTML = text.substring(0, i + 1) + '<span class="cursor">|</span>';
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                heroText.innerHTML = text;
+                // Add a subtle pulsing effect after typing completes
+                heroText.classList.add('pulse');
+                heroText.style.animation = 'pulse 2s infinite';
+            }
+        }
+
+        // Start typing animation after page loads
+        setTimeout(typeWriter, 1000);
+    </script>
+</body>
+</html>
